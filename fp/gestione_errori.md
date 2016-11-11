@@ -8,4 +8,33 @@ In Flow potrebbe per esempio essere implementato così
 type Either<L, R> = { type: 'Left', left: L } | { type: 'Right', right: R };
 ```
 
-Domanda: ad `Either` può essere associata un'istanza di funtore? Hint: attenzione che un funtore è associato ad un kind `* -> *`, mentre `Either` ha kind `* -> * -> *`.
+`Either` è una [monade](../categorie/monadi.md)
+
+```js
+function of<L, A>(right: A): Either<L, A> {
+  return { type: 'Right', right }
+}
+
+function map<L, A, B>(f: (a: A) => B, fa: Either<L, A>): Either<L, B> {
+  if (fa.type === 'Left') {
+    return fa
+  }
+  return of(f(fa.right))
+}
+
+function join<L, A>(mma: Either<L, Either<L, A>>): Either<L, A> {
+  if (mma.type === 'Left') {
+    return mma
+  }
+  return mma.right
+}
+
+// oppure
+
+function chain<L, A, B>(f: (a: A) => Either<L, B>, ma: Either<L, A>): Either<L, B> {
+  if (ma.type === 'Left') {
+    return ma
+  }
+  return f(ma.right)
+}
+```

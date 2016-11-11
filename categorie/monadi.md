@@ -171,3 +171,9 @@ function join<A>(mma: Array<Array<A>>): Array<A> {
   return ???
 }
 ```
+
+2) Definire l'istanza di monade per `Either`
+
+```js
+type Either<L, R> = { type: 'Left', left: L } | { type: 'Right', right: R };
+```

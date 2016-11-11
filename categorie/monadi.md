@@ -73,7 +73,7 @@ Enter monads...
 
 La categorie di Kleisli no e sono equivalenti.
 
-Enter Kleisli cats...
+Enter Kleisli cats... [video](https://www.youtube.com/watch?v=WEp_9uhbAOM)
 
 ## Esempi
 

@@ -38,3 +38,31 @@ function chain<L, A, B>(f: (a: A) => Either<L, B>, ma: Either<L, A>): Either<L, 
   return f(ma.right)
 }
 ```
+
+Due esempi:
+
+a) Type safe `head` con `Maybe`
+
+```js
+// qui l'errore è così banale che non sto neanche a codificarlo
+// quindi restituisco un Maybe<A>
+function head<A>(xs: Array<A>): Maybe<A> {
+  if (xs.length > 0) {
+    return xs[0]
+  }
+  return null
+}
+```
+
+b) Number validation con `Either`
+
+```js
+// codifico gli errori con delle stringhe
+function validateNumber(s: string): Either<string, number> {
+  const n = parseFloat(s)
+  if (isNaN(n)) {
+    return { type: 'Left', left: `invalid number ${s}` }
+  }
+  return { type: 'Right', right: n }
+}
+```

@@ -6,7 +6,7 @@ Una monade `M` è un funtore con due operazioni in più (oltre a `map`)
 
 ```
 of: A => M<A>
-chain: ( A => M<B> ) => M<A> => M<B>
+chain: ( A => M<B>, M<A>) => M<B>
 ```
 
 Nota. Sinonimi di `of` sono `pure`, `return`, `point`; sinonimi di `chain` sono `bind`, `flatMap`.
@@ -126,5 +126,48 @@ Promise
   chain<A, B>(f: (a: A) => Promise<B>, fa: Promise<A>): Promise<B> {
     return fa.then(a => f(a))
   }
+}
+```
+
+## Esercizi
+
+1) Mostrare che la seguenti definizioni di monade sono equivalenti
+
+a) Una monade `M` è un funtore con associate le seguenti operazioni:
+
+```js
+of: A => M<A>
+join: M<M<A>> => M<A>
+```
+
+b) Una monade `M` è un type constructor con associate le seguenti operazioni (notare l'assenza dell'ipotesi funtoriale):
+
+```js
+of: A => M<A>
+chain: ( A => M<B>, M<A> ) => M<B>
+```
+
+Hint: traccia di dimostrazione per `Array`
+
+```js
+// a) => b)
+declare function map<A, B>(f: (a: A) => B, fa: Array<A>): Array<B>;
+declare function of<A>(a: A): Array<A>;
+declare function join<A>(mma: Array<Array<A>>): Array<A>;
+
+function chain<A, B>(f: (a: A) => Array<B>, ma: Array<A>): Array<B> {
+  return ???
+}
+
+// b) => a)
+declare function of<A>(a: A): Array<A>;
+declare function chain<A, B>(f: (a: A) => Array<B>, ma: Array<A>): Array<B>;
+
+function map<A, B>(f: (a: A) => B, fa: Array<A>): Array<B> {
+  return ???
+}
+
+function join<A>(mma: Array<Array<A>>): Array<A> {
+  return ???
 }
 ```

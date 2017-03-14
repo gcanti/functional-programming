@@ -90,6 +90,10 @@ Si può ovviare a questo problema introducendo quella che si chiama definizione 
 const double = x => x * 2
 ```
 
+```scala
+val double = (x: Int)  => x * 2
+```
+
 La definizione di funzione come sottoinsieme di un prodotto cartesiano evidenzia perchè in matematica, e quindi in programmazione funzionale, tutte le funzioni sono (devono essere) pure. Non c'è azione, modifica di stato o modifica degli elementi (che sono considerati immutabili) degli insiemi coinvolti.
 
 **Nota**. Che una funzione sia pura non implica necessariamente che sia bandita la mutabilità ("localmente" è ammissibile). La scopo fondamentale è garantirne le proprietà fondamentali (purezza e referential transparency).
@@ -102,6 +106,10 @@ Una funzione *parziale* è una funzione che non è definita per tutti i valori d
 
 ```js
 const inverse = x => 1 / x
+```
+
+```scala
+val inverse = (x: Int) => 1 / x
 ```
 
 La funzione `inverse: number -> number` non è definita per `x = 0`.
@@ -145,6 +153,13 @@ const inverse = x => {
 }
 ```
 
+```scala
+val inverse = (x: Double) => {
+  if (x != 0d) 1 / x
+  else throw new java.lang.ArithmeticException("cannot divide by zero")
+}
+```
+
 ma la funzione non sarebbe più pura. Allora proviamo ad estendere il codominio con `null` ottenendo `Maybe(number)`
 
 ```js
@@ -152,6 +167,13 @@ ma la funzione non sarebbe più pura. Allora proviamo ad estendere il codominio 
 const inverse = x => {
   if (x !== 0) return 1 / x
   return null
+}
+```
+
+```scala
+val inverse = (x: Double) => {
+  if (x != 0) Some(1 / x)
+  else None
 }
 ```
 
@@ -188,7 +210,7 @@ Svantaggi:
 - il branching non è espresso nel type system
 - le API non "compongono"
 
-## Il tipo `Maybe`
+## Il tipo `Maybe`/`Option`
 
 ```js
 const Maybe = x => ({
@@ -210,6 +232,37 @@ inverse(4).map(double).map(inc) // Maybe(1.5)
 inverse(4).map(compose(inc, double))
 ```
 
+```scala
+// versione semplificata di scala.Option della standard library
+abstract class Option[A] {
+  def isEmpty: Boolean
+  def get: A
+  def map[B](f: A => B): Option[B] =
+    if (isEmpty) None else Some(f(this.get))
+  }
+}
+
+final case class Some[A](value: A) extends Option[A] {
+  def isEmpty = false
+  def get = value
+}
+
+case object None extends Option[Nothing] {
+  def isEmpty = true
+  def get = throw new NoSuchElementException("None.get")
+}
+
+// no boilerplate
+inverse(2).map(double) // Some(1.0)
+inverse(0).map(double) // None
+
+val inc = (x: Double) => x + 1
+
+// composizione
+inverse(0).map(double).map(inc) // None
+inverse(4).map(double).map(inc) // Some(1.5)
+```
+
 `Maybe` mi permette di concentrarmi solo sul path "di successo".
 
 ### Branching tramite la funzione `fold`
@@ -227,6 +280,36 @@ const g = x => `ok: ${x}`
 
 console.log(inverse(2).fold(f, g)) // => 'ok: 0.5'
 console.log(inverse(0).fold(f, g)) // => 'error'
+```
+
+```scala
+abstract class Option[A] {
+  def isEmpty: Boolean
+  def get: A
+  def map[B](f: A => B): Option[B] =
+    if (isEmpty) None else Some(f(this.get))
+  }
+  def fold[B](f: =>B)(g: A => B) {
+    if (isEmpty) f()
+    else g(this.get)
+  }
+}
+
+final case class Some[A](value: A) extends Option[A] {
+  def isEmpty = false
+  def get = value
+}
+
+case object None extends Option[Nothing] {
+  def isEmpty = true
+  def get = throw new NoSuchElementException("None.get")
+}
+
+val f = "error"
+val g = (x: Double) => s"ok: ${x}"
+
+inverse(2).fold(f)(g) // => 'ok: 0.5'
+inverse(0).fold(f)(g) // => 'error'
 ```
 
 Notate come gli `if` sono racchiusi nella definizione di `Maybe`, mentre durante l'utilizzo vengono usate solo funzioni.
@@ -251,6 +334,22 @@ const Right = x => ({
 })
 
 const inverse = x => x === 0 ? Left('cannot divide by zero') : Right(1 / x)
+
+inverse(2).map(double) // Right(1)
+inverse(0).map(double) // Left(cannot divide by zero)
+inverse(0).map(double).map(inc) // Left(cannot divide by zero)
+inverse(4).map(double).map(inc) // Right(1.5)
+```
+
+```scala
+// in caso di fallimento
+final case class Left[A, B](value: A) extends Either[A, B] {}
+// in caso di successo
+final case class Right[A, B](value: A) extends Either[A, B] {}
+
+val inverse = (x: Double) =>
+  if (x == 0) Left("cannot divide by zero")
+  else Right(1 / x)
 
 inverse(2).map(double) // Right(1)
 inverse(0).map(double) // Left(cannot divide by zero)
@@ -376,10 +475,19 @@ Quindi un funtore è una coppia **F** = `(F<?>, lift)` ove
 lift(f: (a: A) => B): (fa: F<A>) => F<B>
 ```
 
+```scala
+def lift[A, B](f: A => B): F[A, B]
+```
+
 La funzione `lift` è meglio conosciuta sottoforma di una sua variante **equivalente** e più popolare chiamata `map`
 
 ```js
 map(f: (a: A) => B, fa: F<A>): F<B>
+```
+
+```scala
+// ecco la definizione di `map` per List
+def map[B](f: (A) ⇒ B): List[B]
 ```
 
 Sia `Maybe` che `Either` implementano l'*interfaccia* funtore nella sua variante OOP (l'argomento `fa` scompare dalla firma di `map`)
@@ -397,6 +505,15 @@ const Left = x => ({
 const Right = x => ({
   map: f => Right(f(x))
 })
+```
+
+```scala
+final case class Left[A, B](value: A) extends Either[A, B] {
+  def map[Y](f: B => Y): Either[A, Y] = Left(value)
+}
+final case class Right[A, B](value: B) extends Either[A, B] {
+  def map[Y](f: B => Y): Either[A, Y] = Right(f(value))
+}
 ```
 
 # Esercizi
@@ -447,6 +564,15 @@ const Right = x => ({
 })
 ```
 
+```scala
+final case class Left[A, B](value: A) extends Either[A, B] {
+  def fold[C](fa: A => C, fb: B => C): C = fa(value)
+}
+final case class Right[A, B](value: B) extends Either[A, B] {
+  def fold[C](fa: A => C, fb: B => C): C = fb(value)
+}
+```
+
 ## Funtori
 
 1)
@@ -459,6 +585,15 @@ const Identity = x => ({
 console.log(Identity(1)) // => Identity(1)
 ```
 
+```scala
+case class Identity[A](value: A) {
+  def map[B](f: A => B) = Identity(f(value))
+}
+
+println(Identity(1))
+println(Identity("hello"))
+```
+
 2)
 
 ```js
@@ -467,6 +602,12 @@ export const Arr = x => ({
 })
 
 console.log(Arr([1, 2, 3]).map(x => x * 2)) // => Arr(2,4,6)
+```
+
+```scala
+case class Arr[A](value: List[A]) {
+  def map[B](f: A => B): Arr[B] = Arr(value.map(f))
+}
 ```
 
 3)
@@ -480,6 +621,19 @@ export const Pro = x => ({
 Pro(Promise.resolve(1)).map(x => x * 2).x.then(x => console.log(x)) // => 2
 ```
 
+```scala
+// date una lettura a questo post http://docs.scala-lang.org/overviews/core/futures.html per dettagli su Future/Promise in Scala
+import scala.concurrent.ExecutionContext.Implicits.global
+import scala.concurrent.Future
+import scala.concurrent.Promise
+
+case class Pro[A](value: Future[A]) {
+  def map[B](f: A => B): Pro[B] = Pro(value.map(f))
+}
+
+val f: Future[Int] = Future { 42 }
+val f1: Future[Int] = Promise.successful(42).future
+```
 4)
 
 ```js
@@ -492,6 +646,14 @@ console.log(IO(() => {
   console.log('IO called')
   return 1
 }).map(x => x * 2).run()) // => 'IO called' \n 2
+```
+
+```scala
+case class IO[A](value: A) {
+  def map[B](f: A => B): () => IO[B] = () => IO(f(value))
+}
+
+IO(2).map(_ + 2)() // IO(4)
 ```
 
 5)

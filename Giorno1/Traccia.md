@@ -86,10 +86,12 @@ Se si realizza che il sottinsieme `f` deve essere descritto "staticamente" in fa
 
 Si può ovviare a questo problema introducendo quella che si chiama definizione *intensionale*, ovvero si esprime una condizione che deve valere per tutte le coppie `(x, y)` che è `y = x * 2`. Questa è la familiare forma con cui conosciamo la funzione raddoppia e come la scriviamo in JavaScript
 
+*JavaScript*
 ```js
 const double = x => x * 2
 ```
 
+*Scala*
 ```scala
 val double = (x: Int)  => x * 2
 ```
@@ -104,10 +106,12 @@ Una funzione *parziale* è una funzione che non è definita per tutti i valori d
 
 **Esempio**
 
+*JavaScript*
 ```js
 const inverse = x => 1 / x
 ```
 
+*Scala*
 ```scala
 val inverse = (x: Int) => 1 / x
 ```
@@ -146,6 +150,7 @@ inverse(0) // => ouch!
 
 Come soluzione potremmo lanciare un'eccezione
 
+*JavaScript*
 ```js
 const inverse = x => {
   if (x !== 0) return 1 / x
@@ -153,6 +158,7 @@ const inverse = x => {
 }
 ```
 
+*Scala*
 ```scala
 val inverse = (x: Double) => {
   if (x != 0d) 1 / x
@@ -162,6 +168,7 @@ val inverse = (x: Double) => {
 
 ma la funzione non sarebbe più pura. Allora proviamo ad estendere il codominio con `null` ottenendo `Maybe(number)`
 
+*JavaScript*
 ```js
 // inverse: number -> Maybe(number)
 const inverse = x => {
@@ -170,6 +177,7 @@ const inverse = x => {
 }
 ```
 
+*Scala*
 ```scala
 val inverse = (x: Double) => {
   if (x != 0) Some(1 / x)
@@ -181,6 +189,7 @@ Il tipo `Maybe(A)` può dunque sostituire le eccezioni (un particolare tipo di s
 
 Ma c'è un problema...
 
+*JavaScript*
 ```js
 // calcola l'inverso e poi moltiplica per 2
 function doubleInverse(x) {
@@ -191,6 +200,7 @@ function doubleInverse(x) {
 
 L'implementazione non è corretta, cosa succede se `y = null`? Occorre tenerne conto
 
+*JavaScript*
 ```js
 function doubleInverse(x) {
   const y = inverse(x)
@@ -212,6 +222,7 @@ Svantaggi:
 
 ## Il tipo `Maybe`/`Option`
 
+*JavaScript*
 ```js
 const Maybe = x => ({
   map: f => Maybe(x == null ? null : f(x))
@@ -232,6 +243,7 @@ inverse(4).map(double).map(inc) // Maybe(1.5)
 inverse(4).map(compose(inc, double))
 ```
 
+*Scala*
 ```scala
 // versione semplificata di scala.Option della standard library
 abstract class Option[A] {
@@ -269,6 +281,7 @@ inverse(4).map(double).map(inc) // Some(1.5)
 
 Prima o poi però dovrò affrontare il problema di stabilire cosa fare in caso di fallimento. La funzione `fold` permette di gestire i due casi
 
+*JavaScript*
 ```js
 const Maybe = x => ({
   map: f => Maybe(x == null ? null : f(x)),
@@ -282,6 +295,7 @@ console.log(inverse(2).fold(f, g)) // => 'ok: 0.5'
 console.log(inverse(0).fold(f, g)) // => 'error'
 ```
 
+*Scala*
 ```scala
 abstract class Option[A] {
   def isEmpty: Boolean
@@ -322,6 +336,7 @@ Inoltre le funzioni `f` e `g` sono generiche e riutilizzabili.
 
 Se esistono molteplici ragioni di fallimento e mi interessa tenerle distinte, oppure se voglio avere una descrizione del fallimento, posso usare `Either`.
 
+*JavaScript*
 ```js
 // in caso di fallimento
 const Left = x => ({
@@ -341,6 +356,7 @@ inverse(0).map(double).map(inc) // Left(cannot divide by zero)
 inverse(4).map(double).map(inc) // Right(1.5)
 ```
 
+*Scala*
 ```scala
 // in caso di fallimento
 final case class Left[A, B](value: A) extends Either[A, B] {}

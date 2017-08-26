@@ -19,7 +19,7 @@ Il modello più semplice di un parser è il seguente tipo
 type Parser<A> = (s: string) => [A, string]
 ```
 
-Un parser per il tipo `A` è una funzione che accettata una stringa da parsare come input e restituisce un valore di tipo `A` più una stringa che rappresenta la parte ancora da parsare. Tuttavia il processo di parsing può fallire, dunque dobbiamo modellare anche questa possibilità di fallimento nel tipo di `Parser`. Il modo più semplice per rappresentare una computazione che produce un valore di tipo `V` ma che può fallire è `Option<V>`. Il modello diventa quindi
+Un parser per il tipo `A` è una funzione che accetta una stringa da parsare come input e restituisce un valore di tipo `A` più una stringa che rappresenta la parte ancora da parsare. Tuttavia il processo di parsing può fallire, dunque dobbiamo modellare anche questa possibilità di fallimento nel tipo di `Parser`. Il modo più semplice per rappresentare una computazione che produce un valore di tipo `V` ma che può fallire è `Option<V>`. Il modello diventa quindi
 
 ```ts
 import { Option } from 'fp-ts/lib/Option'
@@ -36,7 +36,7 @@ const tuple = <A, B>(a: A, b: B): [A, B] => [a, b]
 // un parser che ha successo se la stringa inizia con "foo"
 const foo: Parser<void> = s => {
   const i = s.indexOf('foo')
-  if (i !== -1) {
+  if (i === 0) {
     return some(tuple(undefined, s.substring(3)))
   }
   return none

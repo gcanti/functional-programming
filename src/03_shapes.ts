@@ -17,6 +17,9 @@ export interface Point {
 /**
  * Una forma è una funzione che dato un punto
  * restituisce `true` se il punto appartiene alla forma e `false` altrimenti
+ *
+ * > Sometimes, the elegant implementation is just a function. Not a method. Not a class. Not a framework. Just a function.
+ * > - John Carmack
  */
 export type Shape = (point: Point) => boolean
 

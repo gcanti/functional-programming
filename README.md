@@ -1813,7 +1813,7 @@ Cominciamo da quelli più familiari: i product type.
 
 ## Product types
 
-Un product type è una collezione di tipi T<sub>i</sub> inidicizzati da un insieme `I`.
+Un product type è una collezione di tipi T<sub>i</sub> indicizzati da un insieme `I`.
 
 Due membri comuni di questa famiglia sono le `n`-tuple, dove `I` è un intervallo di numeri naturali:
 

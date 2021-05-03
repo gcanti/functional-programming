@@ -1971,14 +1971,6 @@ Ora che abbiamo visto un po' di esempi possiamo riformulare in modo più esplici
 
 > In general, an algebraic data type specifies a sum of one or more alternatives, where each alternative is a product of zero or more fields.
 
-**Quiz** (TypeScript). Delle seguenti strutture dati dire se sono dei product type o dei sum type
-
-- `ReadonlyArray<A>`
-- `Record<string, A>`
-- `Record<'k1' | 'k2', A>`
-- `ReadonlyMap<string, A>`
-- `ReadonlyMap<'k1' | 'k2', A>`
-
 I sum type possono essere **polimorfici** e **ricorsivi**.
 
 **Esempio** (linked lists)
@@ -1990,6 +1982,14 @@ export type List<A> =
   | { readonly _tag: 'Cons'; readonly head: A; readonly tail: List<A> }
 //                                                              ↑ recursion
 ```
+
+**Quiz** (TypeScript). Delle seguenti strutture dati dire se sono dei product type o dei sum type
+
+- `ReadonlyArray<A>`
+- `Record<string, A>`
+- `Record<'k1' | 'k2', A>`
+- `ReadonlyMap<string, A>`
+- `ReadonlyMap<'k1' | 'k2', A>`
 
 ### Costruttori
 

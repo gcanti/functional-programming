@@ -1601,6 +1601,8 @@ type Point = readonly [number, number]
 const Monoid: Monoid<Point> = tuple(N.MonoidSum, N.MonoidSum)
 ```
 
+**Quiz**. E' possibile definire il "monoide libero" di un generico tipo `A`?
+
 **Demo** (implementare un sistema per disegnare forme geometriche su un canvas)
 
 [`03_shapes.ts`](src/03_shapes.ts)

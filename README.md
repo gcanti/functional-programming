@@ -3381,7 +3381,7 @@ export const program = (ns: ReadonlyArray<number>): string => {
 }
 ```
 
-Usando l'API nativa `findIndex` per procedere con il flusso del programma occorre testare il risultato parziale con un `if` (sempre che ce ne ricordiamo! Il risultato di `findIndex` può essere tranquillamente passato come input a `doSomethingWithIndex`).
+Usando l'API nativa `findIndex` per procedere con il flusso del programma occorre testare il risultato parziale con un `if` (sempre che ce ne ricordiamo! Il risultato di `findIndex` può essere inavvertitamente passato come input a `doSomethingWithIndex`).
 
 Vediamo invece come si può ottenere più facilmente un risultato analogo usando `Option` e la sua istanza di funtore:
 

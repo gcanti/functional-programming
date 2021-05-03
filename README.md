@@ -2257,6 +2257,8 @@ potete indicare un contro di questa seconda soluzione quando si utilizza un ling
 
 Vediamo come gestire gli errori in modo funzionale.
 
+Una funzione che restituisce un errore o lancia una eccezione è un esempio di funzione parziale.
+
 Nel capitolo [Funzioni pure e funzioni parziali](#funzioni-pure-e-funzioni-parziali) abbiamo visto che ogni funzione parziale `f` può essere sempre ricondotta ad una funzione totale `f'`
 
 ```

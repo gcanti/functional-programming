@@ -2541,6 +2541,8 @@ E' possibile definire una istanza di monoide per `Option<A>` che si comporta nel
 declare const getMonoid: <A>(S: Semigroup<A>) => Monoid<Option<A>>
 ```
 
+**Quiz**. Qual'è l'elemento neutro `empty` del monoide?
+
 **Esempio**
 
 Usando `getMonoid` possiamo derivare altri due utili monoidi:

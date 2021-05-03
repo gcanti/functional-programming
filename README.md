@@ -3049,9 +3049,9 @@ Chiamiamo **programma con effetti** una funzione con la seguente firma:
 
 per un qualche type constructor `F`.
 
-Una tale firma modella un programma che accetta un input di tipo `A` e restituisce un risultato di tipo `B` insieme ad un **effetto** `F`.
-
 Ricordiamo che un [type constructor](https://en.wikipedia.org/wiki/Type_constructor) è un operatore a livello di tipi `n`-ario che prende come argomento zero o più tipi e che restituisce un tipo (esempi: `Option`, `ReadonlyArray`).
+
+Una tale firma modella un programma che accetta un input di tipo `A` e restituisce un risultato di tipo `B` insieme ad un **effetto** `F`.
 
 **Esempio**
 

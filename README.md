@@ -3474,9 +3474,11 @@ type User = {
 
 const getId = (_: User): number => _.id
 
+// come lavora `map`...
 // const getIdOption: (fa: Option<User>) => Option<number>
 const getIdOption = map(getId)
 
+// come lavora `contramap`...
 // const getIdEq: (fa: Eq<number>) => Eq<User>
 const getIdEq = contramap(getId)
 

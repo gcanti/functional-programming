@@ -2527,6 +2527,11 @@ declare const getApplySemigroup: <A>(S: Semigroup<A>) => Semigroup<Option<A>>
 
 **Quiz**. E' possibile aggiungere un elemento neutro al semigruppo precedente rendendolo un monoide?
 
+```ts
+// l'implementazione è lasciata come esercizio
+declare const getApplicativeMonoid: <A>(M: Monoid<A>) => Monoid<Option<A>>
+```
+
 E' possibile definire una istanza di monoide per `Option<A>` che si comporta nel modo seguente:
 
 | x        | y        | concat(x, y)           |

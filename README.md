@@ -3454,6 +3454,7 @@ const getName = (user: User): string => user.name
 const getUserName = flow(getUser, map(getName))
 
 getUserName(1)().then(console.log) // => some('Ruth R. Gonzalez')
+getUserName(4)().then(console.log) // => none
 ```
 
 ## Funtori controvarianti

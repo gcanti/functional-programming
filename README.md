@@ -4496,7 +4496,7 @@ Vediamo un esempio in Haskell
 
 ```haskell
 now :: IO Int
-now = undefined
+now = undefined -- usare `undefined` è l'equivalente Haskell di usare `declare` in TypeScript
 
 log :: String -> IO ()
 log = undefined

@@ -14,7 +14,7 @@ import { getLine, putStrLn } from './Console'
 export const secret: T.Task<number> = T.fromIO(randomInt(1, 100))
 
 // combinatore: stampa un messaggio prima di una azione
-const withMessage = <A>(message: string, next: T.Task<A>): T.Task<A> =>
+const withMessage = (message: string) => <A>(next: T.Task<A>): T.Task<A> =>
   pipe(
     putStrLn(message),
     T.chain(() => next)
@@ -27,7 +27,10 @@ const parseGuess = (s: string): O.Option<number> => {
   return isNaN(n) || !isValidGuess(n) ? O.none : O.some(n)
 }
 
-const question: T.Task<string> = withMessage('Indovina il numero', getLine)
+const question: T.Task<string> = pipe(
+  getLine,
+  withMessage('Indovina il numero')
+)
 
 const answer: T.Task<number> = pipe(
   question,
@@ -36,7 +39,7 @@ const answer: T.Task<number> = pipe(
       s,
       parseGuess,
       O.match(
-        () => withMessage('Devi inserire un intero da 1 a 100', answer),
+        () => pipe(answer, withMessage('Devi inserire un intero da 1 a 100')),
         (a) => T.of(a)
       )
     )
@@ -50,9 +53,9 @@ const check = <A>(
   ko: T.Task<A> // cosa fare se l'utente NON ha indovinato
 ): T.Task<A> => {
   if (guess > secret) {
-    return withMessage('Troppo alto', ko)
+    return pipe(ko, withMessage('Troppo alto'))
   } else if (guess < secret) {
-    return withMessage('Troppo basso', ko)
+    return pipe(ko, withMessage('Troppo basso'))
   } else {
     return ok
   }

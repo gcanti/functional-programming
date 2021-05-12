@@ -279,8 +279,6 @@ interface Magma<A> {
 
 Abbiamo quindi un'operazione `concat` che prende due valori di un certo tipo `A` e restituisce un nuovo valore dello stesso tipo (proprietà di chiusura). Dato che il risultato può a sua volta essere utilizzato come input l'operazione può essere ripetuta a piacimento. In altre parole `concat` è un [combinatore](#composizione) per il tipo `A`.
 
-**Quiz**. Il fatto che una operazione sia chiusa non è una proprietà banale, potete fare un esempio di operazione sui numeri naturali (ovvero i numeri interi positivi) per cui la proprietà di chiusura non vale?
-
 Per avere una istanza concreta di magma per un determinato tipo occorre perciò definire un oggetto conforme a questa interfaccia.
 
 **Esempio** (una istanza di `Magma` per il tipo `number`)
@@ -307,6 +305,8 @@ pipe(10, concat(2), concat(3), concat(1), concat(2), console.log)
 ```
 
 Notate che la definizione di `concat` è stata concepita per agevolarne l'uso con `pipe`.
+
+**Quiz**. Il fatto che una operazione sia chiusa non è una proprietà banale. Sarebbe stato possibile definire un magma con la stessa operazione `concat` di `MagmaSub` sui numeri naturali (ovvero i numeri interi positivi) anzichè usando `number`? Potete fare un altro esempio di operazione sui numeri naturali per cui la proprietà di chiusura non vale? 
 
 **Quiz**. Consideriamo la seguente funzione che trasforma una lista in un dizionario, perché si richiede un `Magma` come parametro?
 

@@ -255,7 +255,7 @@ Tecnicamente un semigruppo è un'algebra, in generale con il termine "algebra" s
 
 - uno o più insiemi
 - una o più operazioni sugli insiemi precedenti
-- una o più leggi a cui devono obbedire le operazioni precedenti
+- zero o più leggi a cui devono obbedire le operazioni precedenti
 
 Le algebre sono il modo in cui i matematici catturano un concetto nel modo più diretto eliminando tutto ciò che è superfluo.
 

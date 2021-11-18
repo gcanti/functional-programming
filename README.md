@@ -475,7 +475,7 @@ const SemigroupProduct: Semigroup<number> = {
 }
 ```
 
-Un'altro esempio, con le stringhe questa volta:
+Un altro esempio, con le stringhe questa volta:
 
 ```ts
 import { Semigroup } from 'fp-ts/Semigroup'

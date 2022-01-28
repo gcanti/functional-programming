@@ -45,6 +45,7 @@ Oltre a capire cosa sia la programmazione funzionale, è altrettanto fondamental
 L'obbiettivo della programmazione funzionale è **dominare la complessità di un sistema** usando modelli formali e ponendo particolare attenzione alle **proprietà del codice** e alla facilità di refactoring.
 
 > Functional programming will help teach people the mathematics behind program construction:
+>
 > - how to write composable code
 > - how to reason about side effects
 > - how to write consistent, general, less ad-hoc APIs
@@ -90,7 +91,7 @@ Notate come `map` sia meno flessibile, tuttavia dà più garanzie:
 
 - gli elementi dell'input verrano processati tutti dal primo all'ultimo
 - qualunque sia l'operazione che viene fatta nella callback, il risultato sarà sempre un array con lo stesso numero di elementi
-dell'array in input
+  dell'array in input
 
 Dal punto di vista funzionale, ambito in cui sono importanti le proprietà del codice piuttosto che i dettagli implementativi, l'operazione `map` è interessante **proprio in quanto limitata**.
 
@@ -291,6 +292,14 @@ import { Magma } from 'fp-ts/Magma'
 const MagmaSub: Magma<number> = {
   concat: (first, second) => first - second
 }
+
+console.log(
+  MagmaSub.concat(
+    MagmaSub.concat(MagmaSub.concat(MagmaSub.concat(10, 2), 3), 1),
+    2
+  )
+)
+// => 2
 
 // helper
 const getPipeableConcat = <A>(M: Magma<A>) => (second: A) => (first: A): A =>
@@ -773,13 +782,13 @@ const merge2: ReadonlyNonEmptyArray<User> = [user1, user2, user3]
 
 Il semigruppo libero di `A` quindi non è altro che il semigruppo in cui gli elementi sono tutte le possibili sequenze finite e non vuote di elementi di `A`.
 
-Il semigruppo libero di `A` può essere visto come un modo *lazy* di concatenare elementi di `A`, mantenendo in tal modo tutto il contenuto informativo.
+Il semigruppo libero di `A` può essere visto come un modo _lazy_ di concatenare elementi di `A`, mantenendo in tal modo tutto il contenuto informativo.
 
 Infatti il valore `merge`, che contiene `[user1, user2, user3]`, mi dice ancora quali sono gli elementi da concatenare e in che ordine.
 
 Ora ho tre opzioni possibili in fase di design della API `getUser`:
 
-1) sono in grado di definire un `Semigroup<User>` e voglio procedere subito al merging
+1. sono in grado di definire un `Semigroup<User>` e voglio procedere subito al merging
 
 ```ts
 declare const SemigroupUser: Semigroup<User>
@@ -792,7 +801,7 @@ export const getUser = (id: number): User => {
 }
 ```
 
-2) non sono in grado di definire un `Semigroup<User>` oppure voglio lasciare come configurabile la strategia di merging, perciò la chiedo al consumer della mia API
+2. non sono in grado di definire un `Semigroup<User>` oppure voglio lasciare come configurabile la strategia di merging, perciò la chiedo al consumer della mia API
 
 ```ts
 export const getUser = (SemigroupUser: Semigroup<User>) => (
@@ -805,7 +814,7 @@ export const getUser = (SemigroupUser: Semigroup<User>) => (
 }
 ```
 
-3) non sono in grado di definire un `Semigroup<User>` e non voglio chiederlo al consumer della mia API
+3. non sono in grado di definire un `Semigroup<User>` e non voglio chiederlo al consumer della mia API
 
 Questo è il caso in cui il semigruppo libero di `User` ci può venire in aiuto.
 
@@ -840,11 +849,11 @@ const SemigroupMax: Semigroup<number> = {
 }
 ```
 
-**Quiz**. Perché è importante che `number` sia *totalmente* ordinabile?
+**Quiz**. Perché è importante che `number` sia _totalmente_ ordinabile?
 
 Sarebbe utile poter definire questi due semigruppi (`SemigroupMin` e `SemigroupMax`) anche per altri tipi oltre a `number`.
 
-È possibile catturare la nozione di totalmente ordinabile per altri tipi? Per farlo dobbiamo prima di tutto catturare la nozione di *uguaglianza*.
+È possibile catturare la nozione di totalmente ordinabile per altri tipi? Per farlo dobbiamo prima di tutto catturare la nozione di _uguaglianza_.
 
 # Modellare l'uguaglianza con `Eq`
 
@@ -1292,7 +1301,9 @@ pipe(
 /**
  * Get a sorted `ReadonlyArray` of the keys contained in a `ReadonlyMap`.
  */
-declare const keys: <K>(O: Ord<K>) => <A>(m: ReadonlyMap<K, A>) => ReadonlyArray<K>
+declare const keys: <K>(
+  O: Ord<K>
+) => <A>(m: ReadonlyMap<K, A>) => ReadonlyArray<K>
 ```
 
 per quale motivo questa API richiede un `Ord<K>`?
@@ -1495,7 +1506,6 @@ const Semigroup: Semigroup<ReadonlyArray<string>> = {
 ```
 
 esiste anche l'unità? E' possibile generalizzare il risultato per `ReadonlyArray<A>` per qualsiasi tipo `A`?
-
 
 **Quiz** (difficile). Dimostrare che, dato un monoide, l'elemento neutro è unico.
 
@@ -1772,13 +1782,18 @@ declare const head: <A>(as: ReadonlyArray<A>) => A
 **Quiz**. La funzione `JSON.parse` è totale?
 
 ```ts
-parse: (text: string, reviver?: (this: any, key: string, value: any) => any) => any
+parse: (text: string, reviver?: (this: any, key: string, value: any) => any) =>
+  any
 ```
 
 **Quiz**. La funzione `JSON.stringify` è totale?
 
 ```ts
-stringify: (value: any, replacer?: (this: any, key: string, value: any) => any, space?: string | number) => string
+stringify: (
+  value: any,
+  replacer?: (this: any, key: string, value: any) => any,
+  space?: string | number
+) => string
 ```
 
 In ambito funzionale si tende a definire solo **funzioni pure e totali** (d'ora in poi userò il termine "funzione" come sinonimo di "funzione pura e totale"), quindi come ci si deve comportare se si ha a che fare con una funzione parziale?
@@ -1967,7 +1982,7 @@ export type Action =
 
 Il campo `type`, essendo obbligatorio e avendo un tipo diverso per ogni membro dell'unione, può essere eletto come tag e assicura che i membri siano disgiunti.
 
-**Nota**. Il nome del campo che fa da tag è a discrezione dello sviluppatore, non deve essere necessariamente "type" (in `fp-ts` per esempio, per convenzione si usa il nome "_tag").
+**Nota**. Il nome del campo che fa da tag è a discrezione dello sviluppatore, non deve essere necessariamente "type" (in `fp-ts` per esempio, per convenzione si usa il nome "\_tag").
 
 Ora che abbiamo visto un po' di esempi possiamo riformulare in modo più esplicito che cos'è un algebraic data type:
 
@@ -2021,7 +2036,11 @@ export const add = (text: string): Action => ({
   text
 })
 
-export const update = (id: number, text: string, completed: boolean): Action => ({
+export const update = (
+  id: number,
+  text: string,
+  completed: boolean
+): Action => ({
   type: 'UPDATE_TODO',
   id,
   text,
@@ -2062,7 +2081,6 @@ data List a = Nil | Cons a (List a)
 myList :: List Int
 myList = Cons 1 (Cons 2 (Cons 3 Nil))
 ```
-
 
 ### Pattern matching
 
@@ -2730,9 +2748,9 @@ readFile('./myfile', (e) =>
 Abbiamo visto che una pietra miliare della programmazione funzionale è la **composizione**.
 
 > And how do we solve problems? We decompose bigger problems into smaller problems. If the smaller problems are still too big,
-we decompose them further, and so on. Finally, we write code that solves all the small problems. And then comes the essence of programming: we compose those pieces of code to create solutions to larger problems. Decomposition wouldn't make sense if we weren't able to put the pieces back together. - Bartosz Milewski
+> we decompose them further, and so on. Finally, we write code that solves all the small problems. And then comes the essence of programming: we compose those pieces of code to create solutions to larger problems. Decomposition wouldn't make sense if we weren't able to put the pieces back together. - Bartosz Milewski
 
-Ma cosa significa esattamente? Quando possiamo dire che due cose *compongono*? E quando possiamo dire che due cose compongono *bene*?
+Ma cosa significa esattamente? Quando possiamo dire che due cose _compongono_? E quando possiamo dire che due cose compongono _bene_?
 
 > Entities are composable if we can easily and generally combine their behaviors in some way without having to modify the entities being combined. I think of composability as being the key ingredient necessary for acheiving reuse, and for achieving a combinatorial expansion of what is succinctly expressible in a programming model. - Paul Chiusano
 
@@ -2794,6 +2812,7 @@ dell'umanità (la matematica) si occupa di sviluppare una teoria specificatament
 <img src="images/eilenberg.jpg" width="300" alt="Samuel Eilenberg" />
 
 (Samuel Eilenberg)
+
 </center>
 
 Vedremo nei prossimi capitoli come una categoria possa costituire:
@@ -2839,7 +2858,7 @@ Esiste una operazione `∘`, chiamata "composizione", tale che valgono le seguen
 
 <img src="images/associativity.png" width="500" alt="associativity" />
 
-(**identity**) per ogni oggetto `X`, esiste un morfismo `idX: X ⟼ X` chiamato *il morfismo identità* di `X`, tale che per ogni morfismo `f: A ⟼ X` e ogni morfismo `g: X ⟼ B`, vale `idX ∘ f = f` e `g ∘ idX = g`.
+(**identity**) per ogni oggetto `X`, esiste un morfismo `idX: X ⟼ X` chiamato _il morfismo identità_ di `X`, tale che per ogni morfismo `f: A ⟼ X` e ogni morfismo `g: X ⟼ B`, vale `idX ∘ f = f` e `g ∘ idX = g`.
 
 <img src="images/identity.png" width="300" alt="identity" />
 
@@ -2893,14 +2912,14 @@ const gf = (s: string): boolean => g(f(s))
 
 ## Una categoria per TypeScript
 
-Possiamo definire una categoria, chiamiamola *TS*, come modello semplificato del linguaggio TypeScript, ove:
+Possiamo definire una categoria, chiamiamola _TS_, come modello semplificato del linguaggio TypeScript, ove:
 
 - gli **oggetti** sono tutti i tipi di TypeScript: `string`, `number`, `ReadonlyArray<string>`, ecc...
 - i **morfismi** sono tutte le funzioni di TypeScript: `(a: A) => B`, `(b: B) => C`, ecc... ove `A`, `B`, `C`, ... sono tipi di TypeScript
 - i **morfismi identità** sono tutti codificati da una singola funzione polimorfica `const identity = <A>(a: A): A => a`
 - la **composizione di morfismi** è l'usuale composizione di funzione (che è associativa)
 
-Come modello di TypeScript, la categoria *TS* a prima vista può sembrare troppo limitata: non ci sono cicli, niente `if`, non c'è *quasi* nulla... e tuttavia questo modello semplificato è abbastanza ricco per soddisfare il nostro obbiettivo principale: ragionare su una nozione ben definita di composizione.
+Come modello di TypeScript, la categoria _TS_ a prima vista può sembrare troppo limitata: non ci sono cicli, niente `if`, non c'è _quasi_ nulla... e tuttavia questo modello semplificato è abbastanza ricco per soddisfare il nostro obbiettivo principale: ragionare su una nozione ben definita di composizione.
 
 Ora che abbiamo un semplice modello per il nostro linguaggio di programmazione, affrontiamo il problema centrale della composizione.
 
@@ -2945,16 +2964,16 @@ Per risolverlo il prossimo capitolo parlerà di funtori.
 
 # Funtori
 
-Nell'ultimo capitolo ho presentato la categoria *TS* (la categoria di TypeScript) e il problema centrale con la composizione di funzioni:
+Nell'ultimo capitolo ho presentato la categoria _TS_ (la categoria di TypeScript) e il problema centrale con la composizione di funzioni:
 
 > Come possiamo comporre due funzioni generiche `f: (a: A) => B` e `g: (c: C) => D`?
 
 Ma perché trovare soluzioni a questo problema è così importante?
 
-Perché, se è vero che le categorie possono essere usate per modellare i linguaggi di programmazione, i morfismi (ovvero le funzioni in *TS*) possono essere usate per modellare i **programmi**.
+Perché, se è vero che le categorie possono essere usate per modellare i linguaggi di programmazione, i morfismi (ovvero le funzioni in _TS_) possono essere usate per modellare i **programmi**.
 
 Perciò risolvere quel problema astratto significa anche trovare un modo di **comporre i programmi in modo generico**.
-E *questo* sì che è molto interessante per uno sviluppatore, non è vero?
+E _questo_ sì che è molto interessante per uno sviluppatore, non è vero?
 
 ## Funzioni come programmi
 
@@ -2967,7 +2986,7 @@ La risposta è modellare i side effect tramite quelli che vengono chiamati **eff
 Vediamo due tecniche possibili per farlo in JavaScript:
 
 - definire un DSL (domain specific language) per gli effetti
-- usare i *thunk*
+- usare i _thunk_
 
 La prima tecnica, usare cioè un DSL, significa modificare un programma come:
 
@@ -2991,7 +3010,7 @@ const log = (message: string): DSL => {
 
 Questa prima tecnica presuppone un modo per combinare gli effetti e la definizione di un interprete in grado di eseguire concretamente gli effetti quando si vuole lanciare il programma finale.
 
-Una seconda tecnica, più semplice e possibile in TypeScript, è racchiudere la computazione in un *thunk*:
+Una seconda tecnica, più semplice e possibile in TypeScript, è racchiudere la computazione in un _thunk_:
 
 ```ts
 // un thunk che rappresenta un side effect sincrono
@@ -3026,14 +3045,14 @@ ove vengono eseguiti, si ottiene perciò il seguente schema:
 
 > system = pure core + imperative shell
 
-Nei linguaggi *puramente funzionali* (come Haskell, PureScript o Elm) questa divisione è netta ed è imposta dal linguaggio stesso.
+Nei linguaggi _puramente funzionali_ (come Haskell, PureScript o Elm) questa divisione è netta ed è imposta dal linguaggio stesso.
 
 Anche con questa seconda tecnica (quella usata da `fp-ts`) occorre un modo per combinare gli effetti, il che ci riporta alla nostra volontà di comporre i programmi in modo generico, vediamo come fare.
 
 Innanzi tutto un po' di terminologia (informale): chiamiamo **programma puro** una funzione con la seguente firma:
 
 ```ts
-(a: A) => B
+;(a: A) => B
 ```
 
 Una tale firma modella un programma che accetta un input di tipo `A` e restituisce un risultato di tipo `B`, senza alcun effetto.
@@ -3332,9 +3351,9 @@ ove _C_ e _D_ sono due categorie (aka due linguaggi di programmazione).
 
 <img src="images/functor.png" width="500" alt="functor" />
 
-Anche se una mappa tra due linguaggi di programmazione è un'idea intrigante, siamo più interessati ad una mappa in cui _C_ and _D_ coincidono (con la categoria *TS*). In questo caso parliamo di **endofuntori** ("endo" significa "dentro", "interno").
+Anche se una mappa tra due linguaggi di programmazione è un'idea intrigante, siamo più interessati ad una mappa in cui _C_ and _D_ coincidono (con la categoria _TS_). In questo caso parliamo di **endofuntori** ("endo" significa "dentro", "interno").
 
-D'ora in poi, se non diversamente specificato, quando scrivo "funtore" intendo un endofuntore in *TS*.
+D'ora in poi, se non diversamente specificato, quando scrivo "funtore" intendo un endofuntore in _TS_.
 
 Ora che sappiamo qual'è l'aspetto pratico che ci interessa dei funtori, vediamone la definizione formale.
 
@@ -3405,7 +3424,7 @@ export const program = (ns: ReadonlyArray<number>): Option<string> =>
   )
 ```
 
-In pratica, utilizzando `Option`, abbiamo sempre di fronte l'*happy path*, la gestione dell'errore avviene dietro le quinte grazie alla sua `map`.
+In pratica, utilizzando `Option`, abbiamo sempre di fronte l'_happy path_, la gestione dell'errore avviene dietro le quinte grazie alla sua `map`.
 
 **Demo** (opzionale)
 
@@ -3559,11 +3578,11 @@ export const Functor: Functor1<'Response'> = {
 
 Non ancora. I funtori ci permettono di comporre un programma con effetti `f` con un programma puro `g`, ma `g` deve essere una funzione **unaria**, ovvero una funzione che accetta un solo argomento. Cosa succede se `g` accetta due o più argomenti?
 
-| Program f | Program g               | Composition   |
-| --------- | ----------------------- | ------------- |
-| pure      | pure                    | `g ∘ f`       |
-| effectful | pure (unary)            | `map(g) ∘ f`  |
-| effectful | pure (`n`-ary, `n > 1`) | ?             |
+| Program f | Program g               | Composition  |
+| --------- | ----------------------- | ------------ |
+| pure      | pure                    | `g ∘ f`      |
+| effectful | pure (unary)            | `map(g) ∘ f` |
+| effectful | pure (`n`-ary, `n > 1`) | ?            |
 
 Per poter gestire questa circostanza abbiamo bisogno di qualcosa in più, nel prossimo capitolo vedremo un'altra importante astrazione della programmazione funzionale: i **funtori applicativi**.
 
@@ -3571,10 +3590,10 @@ Per poter gestire questa circostanza abbiamo bisogno di qualcosa in più, nel pr
 
 Nella sezione riguardante i funtori abbiamo visto che possiamo comporre un programma con effetti `f: (a: A) => F<B>` con un programma puro `g: (b: B) => C` tramite una trasformazione di `g` in una funzione `map(g): (fb: F<B>) => F<C>`, ammesso che `F` ammetta una istanza di funtore.
 
-| Program f | Program g    | Composition   |
-| --------- | ------------ | ------------- |
-| pure      | pure         | `g ∘ f`       |
-| effectful | pure (unary) | `map(g) ∘ f`  |
+| Program f | Program g    | Composition  |
+| --------- | ------------ | ------------ |
+| pure      | pure         | `g ∘ f`      |
+| effectful | pure (unary) | `map(g) ∘ f` |
 
 Tuttavia `g` deve essere unaria, ovvero deve accettare un solo parametro in input. Che succede se `g` accetta due parametri? Possiamo ancora trasformare `g` usando solo l'istanza di funtore?
 
@@ -3731,18 +3750,16 @@ Ma ora siamo bloccati: non c'è alcuna operazione legale fornita dall'istanza di
 Introduciamo perciò una nuova operazione `ap` che realizza questo spacchettamento:
 
 ```ts
-declare const ap: <A>(
-  fa: Task<A>
-) => <B>(fab: Task<(a: A) => B>) => Task<B>
+declare const ap: <A>(fa: Task<A>) => <B>(fab: Task<(a: A) => B>) => Task<B>
 ```
 
 **Nota**. Come mai il nome "ap"? Perché può essere vista come una sorta di applicazione di funzione
 
 ```ts
 // `apply` applica una funzione ad un valore
-declare const apply: <A>(a: A      ) => <B>(f:      (a: A) => B ) => B
+declare const apply: <A>(a: A) => <B>(f: (a: A) => B) => B
 
-declare const ap:    <A>(a: Task<A>) => <B>(f: Task<(a: A) => B>) => Task<B>
+declare const ap: <A>(a: Task<A>) => <B>(f: Task<(a: A) => B>) => Task<B>
 // `ap` applica una funzione racchiusa in un effetto ad un valore racchiuso in un effetto
 ```
 
@@ -3902,7 +3919,7 @@ const ap = <R, A>(fa: Reader<R, A>) => <B>(
 }
 ```
 
-Abbiamo visto che con `ap` possiamo gestire funzioni con due parametri, ma che succede con le funzioni che accettano **tre** parametri? Abbiamo bisogno di *un'altra astrazione ancora*?
+Abbiamo visto che con `ap` possiamo gestire funzioni con due parametri, ma che succede con le funzioni che accettano **tre** parametri? Abbiamo bisogno di _un'altra astrazione ancora_?
 
 La buona notizia è che la risposta è no, `map` + `ap` sono sufficienti:
 
@@ -4044,6 +4061,7 @@ Ancora una volta abbiamo bisogno di qualche cosa in più, nel capitolo seguente 
 <img src="images/wadler.jpg" width="300" alt="Heinrich Kleisli" />
 
 (Philip Lee Wadler is an American computer scientist known for his contributions to programming language design and type theory)
+
 </center>
 
 Nell'ultimo capitolo abbiamo visto che possiamo comporre un programma con effetti `f: (a: A) => F<B>` con un programma `n`-ario puro `g`, ammesso che `F` ammetta una istanza di funtore applicativo:
@@ -4201,30 +4219,33 @@ Possiamo trasformare il nostro problema in un problema categoriale, ovvero: poss
 <img src="images/kleisli.jpg" width="300" alt="Heinrich Kleisli" />
 
 (Heinrich Kleisli, Swiss mathematician)
+
 </center>
 
-Cerchiamo di costruire una categoria *K* (chiamata **categoria di Kleisli**) che contenga *solo* Kleisli arrow:
+Cerchiamo di costruire una categoria _K_ (chiamata **categoria di Kleisli**) che contenga _solo_ Kleisli arrow:
 
-- gli **oggetti** sono gli stessi oggetti della categoria *TS*, ovvero tutti i tipi di TypeScript.
+- gli **oggetti** sono gli stessi oggetti della categoria _TS_, ovvero tutti i tipi di TypeScript.
 - i **morfismi** sono costruiti così: ogni volta che c'è una Kleisli arrow `f: A ⟼ M<B>` in _TS_ tracciamo una freccia `f': A ⟼ B` in _K_
 
 <center>
 <img src="images/kleisli_category.png" alt="above the TS category, below the K construction" width="400px" />
 
 (sopra la categoria _TS_, sotto la costruzione di _K_)
+
 </center>
 
-Dunque cosa sarebbe la composizione di `f` e `g` in *K*? E' la freccia rossa chiamata `h'` nell'immagine qui sotto:
+Dunque cosa sarebbe la composizione di `f` e `g` in _K_? E' la freccia rossa chiamata `h'` nell'immagine qui sotto:
 
 <center>
 <img src="images/kleisli_composition.png" alt="above the composition in the TS category, below the composition in the K construction" width="400px" />
 
 (sopra la categoria _TS_, sotto la costruzione di _K_)
+
 </center>
 
 Dato che `h'` è una freccia che va da `A` a `C` in `K`, possiamo far corrispondere una funzione `h` che va da `A` a `M<C>` in `TS`.
 
-Quindi un buon candidato per la composizione di `f` e `g` in *TS* è ancora una Kleisli arrow con la seguente firma: `(a: A) => M<C>`.
+Quindi un buon candidato per la composizione di `f` e `g` in _TS_ è ancora una Kleisli arrow con la seguente firma: `(a: A) => M<C>`.
 
 Come facciamo a costruire concretamente una tale funzione? Beh, proviamoci!
 
@@ -4236,6 +4257,7 @@ Il punto (1) della definizione di monade ci dice che `M` ammette una istanza di 
 <img src="images/flatMap.png" alt="where chain comes from" width="450px" />
 
 (come ottenere la funzione `h`)
+
 </center>
 
 Ma ora siamo bloccati: non c'è alcuna operazione legale della istanza di funtore che ci permette di appiattire un valore di tipo `M<M<C>>` in un valore di tipo `M<C>`, abbiamo bisogno di una operazione addizionale, chiamiamola `flatten`.
@@ -4258,34 +4280,39 @@ chain = flatten ∘ map(g)
 <img src="images/chain.png" alt="come agisce `chain` sulla funzione `g`" width="400px" />
 
 (come agisce `chain` sulla funzione `g`)
+
 </center>
 
 Ora possiamo aggiornare la nostra "tabella di composizione"
 
-| Program f | Program g     | Composition      |
-| --------- | ------------- | ---------------- |
-| pure      | pure          | `g ∘ f`          |
-| effectful | pure (unary)  | `map(g) ∘ f`     |
-| effectful | pure, `n`-ary | `liftAn(g) ∘ f`  |
-| effectful | effectful     | `chain(g) ∘ f`   |
+| Program f | Program g     | Composition     |
+| --------- | ------------- | --------------- |
+| pure      | pure          | `g ∘ f`         |
+| effectful | pure (unary)  | `map(g) ∘ f`    |
+| effectful | pure, `n`-ary | `liftAn(g) ∘ f` |
+| effectful | effectful     | `chain(g) ∘ f`  |
 
-E per quanto riguarda l'operazione `of`? Ebbene, `of` proviene dai morfismi identità in *K*: per ogni morfismo identità 1<sub>A</sub> in _K_ deve esserci una corrispondente funzione da `A` a `M<A>` (ovvero `of: <A>(a: A) => M<A>`).
+E per quanto riguarda l'operazione `of`? Ebbene, `of` proviene dai morfismi identità in _K_: per ogni morfismo identità 1<sub>A</sub> in _K_ deve esserci una corrispondente funzione da `A` a `M<A>` (ovvero `of: <A>(a: A) => M<A>`).
 
 <center>
 <img src="images/of.png" alt="where of comes from" width="300px" />
 
 (come ottenere `of`)
+
 </center>
 
 Il fatto che la `of` sia l'elemento neutro rispetto alla `chain` permette questo tipo di controllo di flusso (piuttosto comune):
 
 ```ts
-pipe(mb, M.chain(b => predicate(b) ? M.of(b) : g(b)))
+pipe(
+  mb,
+  M.chain((b) => (predicate(b) ? M.of(b) : g(b)))
+)
 ```
 
 ove `predicate: (b: B) => boolean`, `mb: M<B>` e `g: (b: B) => M<B>`.
 
-Ultima domanda: da dove nascono le leggi? Esse non sono altro che le leggi categoriali in *K* tradotte in *TS*:
+Ultima domanda: da dove nascono le leggi? Esse non sono altro che le leggi categoriali in _K_ tradotte in _TS_:
 
 | Law            | _K_                               | _TS_                                                    |
 | -------------- | --------------------------------- | ------------------------------------------------------- |
@@ -4425,10 +4452,7 @@ const program1 = pipe(
 L'azione:
 
 ```ts
-pipe(
-  readFile('file.txt'),
-  chain(log)
-)
+pipe(readFile('file.txt'), chain(log))
 ```
 
 è ripetuta due volte nel programma, ma dato che vale la trasparenza referenziale possiamo mettere a fattor comune l'azione assegnandola ad una costante:

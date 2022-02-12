@@ -1938,10 +1938,6 @@ Il tipo
 
 ```ts
 type StringsOrNumbers = ReadonlyArray<string> | ReadonlyArray<number>
-
-declare const sn: StringsOrNumbers
-
-sn.map() // error: This expression is not callable.
 ```
 
 non è una unione disgiunta perché il valore `[]` (array vuoto) appartiene ad ambedue i membri dell'unione.

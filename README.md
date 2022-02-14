@@ -3422,10 +3422,6 @@ export const program = (ns: ReadonlyArray<number>): Option<string> =>
 
 In pratica, utilizzando `Option`, abbiamo sempre di fronte l'_happy path_, la gestione dell'errore avviene dietro le quinte grazie alla sua `map`.
 
-**Demo** (opzionale)
-
-[`04_functor.ts`](src/04_functor.ts)
-
 **Quiz**. `Task<A>` rappresenta una computazione asincrona che non può fallire, come possiamo modellare invece una computazione asincrona che può fallire?
 
 ## I funtori compongono

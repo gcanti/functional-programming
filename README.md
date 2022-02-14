@@ -3047,8 +3047,8 @@ Anche con questa seconda tecnica (quella usata da `fp-ts`) occorre un modo per c
 
 Innanzi tutto un po' di terminologia (informale): chiamiamo **programma puro** una funzione con la seguente firma:
 
-```ts
-;(a: A) => B
+```
+(a: A) => B
 ```
 
 Una tale firma modella un programma che accetta un input di tipo `A` e restituisce un risultato di tipo `B`, senza alcun effetto.
@@ -3063,7 +3063,7 @@ const len = (s: string): number => s.length
 
 Chiamiamo **programma con effetti** una funzione con la seguente firma:
 
-```ts
+```
 (a: A) => F<B>
 ```
 

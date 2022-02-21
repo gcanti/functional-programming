@@ -3961,7 +3961,7 @@ Introduciamo perciò una tale operazione, chiamata `of` (possibili sinonimi **pu
 declare const of: <B>(b: B) => F<B>
 ```
 
-In letteratura si parla di **funtori applicativi** per i type constructor che ammettono ambedue le operazioni `ap` e `of`.
+In letteratura si parla di **funtori applicativi** per i type constructor che ammettono, in aggiunta a `map`, ambedue le operazioni `ap` e `of`.
 
 Vediamo come è definita l'opererazione `of` per alcuni type constructor noti:
 

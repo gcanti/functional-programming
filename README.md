@@ -4178,7 +4178,7 @@ Le funzioni `of` e `chain` devono obbedire a tre leggi:
 - `chain(f) ∘ of = f` (**Right identity**)
 - `chain(h) ∘ (chain(g) ∘ f) = chain((chain(h) ∘ g)) ∘ f` (**Associativity**)
 
-ove `f`, `g`, `h` sono tutte funzioni con effetto e `∘` è l'usuale composizione di funzioni.
+ove `f`, `g`, `h` sono tutte funzioni con effetto `M` e `∘` è l'usuale composizione di funzioni.
 
 Dopo aver visto per la prima volta questa definizione avevo in testa molte domande:
 

@@ -45,15 +45,6 @@ export const multiply = (n: number) => (die: Die): Die =>
   )
 
 // ------------------------------------
-// instances
-// ------------------------------------
-
-export const monoidDie: Monoid<Die> = {
-  concat: (first, second) => pipe(first, add(second)),
-  empty: () => 0 // <= un dado con zero facce
-}
-
-// ------------------------------------
 // tests
 // ------------------------------------
 

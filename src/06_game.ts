@@ -40,7 +40,7 @@ const answer: T.Task<number> = pipe(
       parseGuess,
       O.match(
         () => pipe(answer, withMessage('Devi inserire un intero da 1 a 100')),
-        (a) => T.of(a)
+        (n) => T.of(n)
       )
     )
   )

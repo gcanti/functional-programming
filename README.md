@@ -4003,10 +4003,6 @@ import { Reader } from 'fp-ts/Reader'
 const of = <R, A>(a: A): Reader<R, A> => () => a
 ```
 
-**Demo**
-
-[`05_applicative.ts`](src/05_applicative.ts)
-
 ## I funtori applicativi compongono
 
 I funtori applicativi compongono, ovvero dati due funtori applicativi `F` e `G`, la loro composizione `F<G<A>>` è ancora un funtore applicativo.

@@ -5,7 +5,6 @@
 */
 import { pipe } from 'fp-ts/function'
 import * as IO from 'fp-ts/IO'
-import { Monoid } from 'fp-ts/Monoid'
 import * as R from 'fp-ts/Random'
 
 // ------------------------------------

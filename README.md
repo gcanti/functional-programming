@@ -3599,7 +3599,7 @@ g: (b: B, c: C) => D
 
 Possiamo riscrivere `g` usando una tecnica chiamata **currying**.
 
-> Currying is the technique of translating the evaluation of a function that takes multiple parameters into evaluating a sequence of functions, **each with a single parameter**. For example, a function that takes two parameters, one from `B` and one from `C`, and produces outputs in `D`, by currying is translated into a function that takes a single parameter from `C` and produces as outputs functions from `B` to `C`.
+> Currying is the technique of translating the evaluation of a function that takes multiple parameters into evaluating a sequence of functions, **each with a single parameter**. For example, a function that takes two parameters, one from `B` and one from `C`, and produces outputs in `D`, by currying is translated into a function that takes a single parameter from `B` and produces as outputs functions from `C` to `D`.
 
 (source: [currying on wikipedia.org](https://en.wikipedia.org/wiki/Currying))
 

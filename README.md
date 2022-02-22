@@ -4660,6 +4660,37 @@ const DepsSync: Deps = {
 program4(DepsSync)()
 ```
 
+L'istanza `DepsSync` è quella di "produzione" (legge e scrive sul vero filesystem), ma è relativamente semplice definirne una adatta a verificare il comportamento del programma e a scrivere test:
+
+```ts
+import { log } from 'fp-ts/Console'
+import { chain, of } from 'fp-ts/IO'
+
+// istanza di test
+const DepsTest: Deps = {
+  readFile: (filename) =>
+    pipe(
+      log(`calling readFile(${filename})...`),
+      chain(() => of('content'))
+    ),
+  writeFile: (filename: string, data: string) =>
+    log(`calling writeFile(${filename}, ${data})...`),
+  log: (message) => log(`calling log(${message})...`),
+  chain
+}
+
+program4(DepsTest)()
+/*
+calling readFile(file.txt)...
+calling log(content)...
+calling readFile(file.txt)...
+calling writeFile(file.txt, content
+// eof)...
+calling readFile(file.txt)...
+calling log(content)...
+*/
+```
+
 Ma c'è di più, possiamo persino astrarre l'effetto in cui gira il programma. Definiamo un nostro effetto `FileSystem` (l'effetto di leggere / scrivere sul file system):
 
 ```ts

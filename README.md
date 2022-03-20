@@ -2894,7 +2894,7 @@ L'implementazione potrebbe essere qualcosa come:
 ```ts
 const idA = (s: string): string => s
 
-const idB = (n: number): string => n
+const idB = (n: number): number => n
 
 const idC = (b: boolean): boolean => b
 

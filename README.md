@@ -1545,7 +1545,7 @@ Un **endomorfismo** è una funzione in cui il tipo in input e il tipo in output 
 type Endomorphism<A> = (a: A) => A
 ```
 
-Dato un tipo `A`, gli endomorfismi su `A` sono un monoide, tale che:
+Dato un tipo `A`, gli endomorfismi su `A` costituiscono un monoide, tale che:
 
 - l'operazione `concat` è l'usuale composizione di funzioni
 - l'unità è la funzione identità

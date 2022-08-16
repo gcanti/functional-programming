@@ -3946,19 +3946,19 @@ Ora possiamo aggiornare la nostra "tabella di composizione":
 Ora sappiamo che se abbiamo due funzioni `f: (a: A) => F<B>`, `g: (b: B, c: C) => D` possiamo ottenerne la composizione `h`:
 
 ```ts
-h: (a: A) => (fb: F<B>) => F<D>
+h: (a: A) => (fc: F<C>) => F<D>
 ```
 
-Per eseguire `h` abbiamo perciò bisogno di un valore di tipo `A` e di un valore di tipo `F<B>`.
+Per eseguire `h` abbiamo perciò bisogno di un valore di tipo `A` e di un valore di tipo `F<C>`.
 
-Ma che succede se invece di un valore di tipo `F<B>` per il secondo parametro `fb` abbiamo a disposizione solo un valore di tipo `B`?
+Ma che succede se invece di un valore di tipo `F<C>` per il secondo parametro `fc` abbiamo a disposizione solo un valore di tipo `C`?
 
-Sarebbe utile un'operazione che sia in grado di trasformare un valore di tipo `B` in un valore di tipo `F<B>`, in modo che si possa poi usare `h`.
+Sarebbe utile un'operazione che sia in grado di trasformare un valore di tipo `C` in un valore di tipo `F<C>`, in modo che si possa poi usare `h`.
 
 Introduciamo perciò una tale operazione, chiamata `of` (possibili sinonimi **pure**, **return**):
 
 ```ts
-declare const of: <B>(b: B) => F<B>
+declare const of: <C>(c: C) => F<C>
 ```
 
 In letteratura si parla di **funtori applicativi** per i type constructor che ammettono, in aggiunta a `map`, ambedue le operazioni `ap` e `of`.

@@ -1,4 +1,8 @@
-**Setup**
+**Note**. There is an adaptation written in english: https://github.com/enricopolanski/functional-programming
+
+---
+
+Setup
 
 ```sh
 git clone https://github.com/gcanti/functional-programming.git

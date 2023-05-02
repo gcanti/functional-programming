@@ -1,4 +1,7 @@
-**Note**. There is an adaptation written in english: https://github.com/enricopolanski/functional-programming
+**Note**.
+
+- There is an adaptation written in english: https://github.com/enricopolanski/functional-programming
+- 한글 번역본이 있습니다: https://github.com/alstn2468/functional-programming
 
 ---
 

@@ -3446,7 +3446,7 @@ type TaskOption<A> = T.Task<O.Option<A>>
 
 export const map: <A, B>(
   f: (a: A) => B
-) => (fa: TaskOption<A>) => TaskOption<B> = flow(O.map, T.map)
+) => (fa: TaskOption<A>): TaskOption<B> => flow(O.map, T.map)
 
 // -------------------
 // esempio di utilizzo

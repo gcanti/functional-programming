@@ -1,6 +1,6 @@
 # Monad transformers
 
-**Senario 1**
+**Scenario 1**
 
 Supponiamo di avere definto le seguenti API:
 
